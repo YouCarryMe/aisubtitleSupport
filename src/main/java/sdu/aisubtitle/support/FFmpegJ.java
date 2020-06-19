@@ -3,6 +3,8 @@ package sdu.aisubtitle.support;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FFmpegJ {
 
@@ -64,9 +66,19 @@ public class FFmpegJ {
 
     /**
      * 执行命令
+     *
+     * @return Bool
      */
-    public void run() {
-        ExecuteCommand.exec(this.commList);
+    public Boolean run() {
+        String res = ExecuteCommand.exec(this.commList);
+        String regexExitCode = "exitCode = (\\d+);";
+        Pattern pattern = Pattern.compile(regexExitCode);
+        Matcher m = pattern.matcher(res);
+        int exitCode = 1;
+        if (m.find()) {
+            exitCode = Integer.valueOf(m.group(1));
+        }
+        return exitCode == 0 ? true : false;
     }
 
 }

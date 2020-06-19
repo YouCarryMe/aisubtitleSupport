@@ -3,13 +3,18 @@ package sdu.aisubtitle.support;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MediaProcess {
+
+    private static String pythonExe = "python";
+
+    public void setPythonExe(String str) {
+        pythonExe = str;
+    }
 
     private static double getTimelen(String time) {
         double sec = 0;
@@ -44,8 +49,8 @@ public class MediaProcess {
         List<String> commList = new ArrayList<>(Arrays.asList("ffmpeg", "-i", filePath));
         String res = ExecuteCommand.exec(commList);
 
-        String regexDuration = ", bitrate: (\\d*) kb\\/s";
-        Pattern pattern = Pattern.compile(regexDuration);
+        String regexBitrate = ", bitrate: (\\d*) kb\\/s";
+        Pattern pattern = Pattern.compile(regexBitrate);
         Matcher m = pattern.matcher(res);
         int bitrate = 0;
         if (m.find()) {
@@ -55,12 +60,57 @@ public class MediaProcess {
     }
 
     public static long getSize(String filePath) {
-        File f= new File(filePath);
+        File f = new File(filePath);
         long size = 0;
-        if (f.exists() && f.isFile()){
+        if (f.exists() && f.isFile()) {
             size = f.length();
         }
         return size;
+    }
+
+    public static String getFormat(String filePath) {
+        String[] temp = filePath.split("\\.");
+        String format = temp[temp.length - 1];
+        return format;
+    }
+
+    public static Boolean compressVideo(final String videoPath, final String compressedVideoPath, final int b) throws IOException, InterruptedException {
+        List<String> globals = new ArrayList<>();
+        List<String> input1Opts = new ArrayList<>();
+        Map<String, List<String>> inputs = new HashMap<>();
+        inputs.put(videoPath, input1Opts);
+        List<String> outputOpts = new ArrayList<>(Arrays.asList("-b", "" + b + "k", "-y"));
+        Map<String, List<String>> outputs = new HashMap<>();
+        outputs.put(compressedVideoPath, outputOpts);
+        FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);
+        System.out.println(ff.cmd());
+        return ff.run();
+    }
+
+    public static Boolean exportAudio(final String videoPath, final String audioPath) throws IOException, InterruptedException {
+        List<String> globals = new ArrayList<>();
+        List<String> input1Opts = new ArrayList<>();
+        Map<String, List<String>> inputs = new HashMap<>();
+        inputs.put(videoPath, input1Opts);
+        List<String> outputOpts = new ArrayList<>(Arrays.asList("-vn", "-c:a", "copy", "-y"));
+        Map<String, List<String>> outputs = new HashMap<>();
+        outputs.put(audioPath, outputOpts);
+        FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);
+        System.out.println(ff.cmd());
+        return ff.run();
+    }
+
+    public static Boolean importSubtitle(final String videoPath, final String subtitlePath, final String videoWithSubtitlePath) throws IOException, InterruptedException {
+        List<String> globals = new ArrayList<>();
+        List<String> input1Opts = new ArrayList<>();
+        Map<String, List<String>> inputs = new HashMap<>();
+        inputs.put(videoPath, input1Opts);
+        List<String> outputOpts = new ArrayList<>(Arrays.asList("-vf", "subtitles="+subtitlePath, "-y"));
+        Map<String, List<String>> outputs = new HashMap<>();
+        outputs.put(videoWithSubtitlePath, outputOpts);
+        FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);
+        System.out.println(ff.cmd());
+        return ff.run();
     }
 
 }

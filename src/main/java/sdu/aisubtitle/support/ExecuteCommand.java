@@ -24,8 +24,9 @@ public class ExecuteCommand {
                 System.out.println(line);
                 sb.append(line);
             }
-            final int exitCode = process.waitFor();
-            System.out.println("exitCode = " + exitCode);
+            final String exitCode = "exitCode = " + process.waitFor() + ";";
+            System.out.println(exitCode);
+            sb.append(exitCode);
             process.destroy();
         } catch (final IOException e) {
             e.printStackTrace();
