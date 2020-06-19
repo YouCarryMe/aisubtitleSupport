@@ -10,6 +10,7 @@ public class ExecuteCommand {
      * 执行命令行
      *
      * @param commList 命令列表
+     * @return 执行命令后终端的输出
      * @author PY
      */
     public static String exec(final List<String> commList) {

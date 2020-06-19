@@ -13,6 +13,13 @@ import java.util.Base64;
 
 public class FaceFusion {
 
+    /**
+     * 将图片转换成base64编码
+     *
+     * @param imgPath 需要被编码的图片路径
+     * @return 图片的base64编码
+     * @author PY
+     */
     public static String imgToBase64(String imgPath) {
         InputStream in = null;
         byte[] data = null;
@@ -35,6 +42,14 @@ public class FaceFusion {
         return encode;
     }
 
+    /**
+     * 将图片的base64编码生成jpg文件
+     *
+     * @param imgData 图片的base64编码
+     * @param imgPath 输出图片的路径
+     * @return 解码是否成功
+     * @author PY
+     */
     public static boolean base64ToImg(String imgData, String imgPath) {
         if (imgData == null)
             return false;
@@ -64,6 +79,13 @@ public class FaceFusion {
         return true;
     }
 
+    /**
+     * 人脸融合
+     *
+     * @param imgPath    用户的人脸图片
+     * @param outputPath 融合后的人脸图片
+     * @author PY
+     */
     public static void facefusion(String imgPath, String outputPath) {
 
         try {

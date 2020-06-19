@@ -10,12 +10,13 @@ import java.util.regex.Pattern;
 
 public class MediaProcess {
 
-    private static String pythonExe = "python";
-
-    public void setPythonExe(String str) {
-        pythonExe = str;
-    }
-
+    /**
+     * 根据时间字符串获得时长 格式：00:00:00,000
+     *
+     * @param time 时间字符串
+     * @return 时长（秒为单位）
+     * @author PY
+     */
     private static double getTimelen(String time) {
         double sec = 0;
         String strs[] = time.split(":");
@@ -31,6 +32,13 @@ public class MediaProcess {
         return sec;
     }
 
+    /**
+     * 获得视频或者音频文件的时长
+     *
+     * @param filePath 文件路径
+     * @return 时长（秒为单位）
+     * @author PY
+     */
     public static double getTimeLen(String filePath) {
         List<String> commList = new ArrayList<>(Arrays.asList("ffmpeg", "-i", filePath));
         String res = ExecuteCommand.exec(commList);
@@ -45,6 +53,13 @@ public class MediaProcess {
         return timeLen;
     }
 
+    /**
+     * 获得视频或音频的比特率
+     *
+     * @param filePath 文件路径
+     * @return 比特率（kb/s为单位）
+     * @author PY
+     */
     public static int getBitrate(String filePath) {
         List<String> commList = new ArrayList<>(Arrays.asList("ffmpeg", "-i", filePath));
         String res = ExecuteCommand.exec(commList);
@@ -59,6 +74,13 @@ public class MediaProcess {
         return bitrate;
     }
 
+    /**
+     * 获得文件大小
+     *
+     * @param filePath 文件路径
+     * @return 文件大小（Byte为单位）
+     * @author PY
+     */
     public static long getSize(String filePath) {
         File f = new File(filePath);
         long size = 0;
@@ -68,12 +90,30 @@ public class MediaProcess {
         return size;
     }
 
+    /**
+     * 获得文件的格式
+     *
+     * @param filePath 文件路径
+     * @return 文件格式
+     * @author PY
+     */
     public static String getFormat(String filePath) {
         String[] temp = filePath.split("\\.");
         String format = temp[temp.length - 1];
         return format;
     }
 
+    /**
+     * 压缩视频
+     *
+     * @param videoPath           被压缩视频的路径
+     * @param compressedVideoPath 压缩后视频的路径
+     * @param b                   压缩后的比特率
+     * @return 是否成功
+     * @throws IOException
+     * @throws InterruptedException
+     * @author PY
+     */
     public static Boolean compressVideo(final String videoPath, final String compressedVideoPath, final int b) throws IOException, InterruptedException {
         List<String> globals = new ArrayList<>();
         List<String> input1Opts = new ArrayList<>();
@@ -87,6 +127,16 @@ public class MediaProcess {
         return ff.run();
     }
 
+    /**
+     * 导出音频
+     *
+     * @param videoPath 视频路径
+     * @param audioPath 音频路径
+     * @return 是否成功
+     * @throws IOException
+     * @throws InterruptedException
+     * @author PY
+     */
     public static Boolean exportAudio(final String videoPath, final String audioPath) throws IOException, InterruptedException {
         List<String> globals = new ArrayList<>();
         List<String> input1Opts = new ArrayList<>();
@@ -100,12 +150,23 @@ public class MediaProcess {
         return ff.run();
     }
 
+    /**
+     * 导入字幕
+     *
+     * @param videoPath             视频路径
+     * @param subtitlePath          字幕路径
+     * @param videoWithSubtitlePath 导入路径后的视频路径
+     * @return 是否成功
+     * @throws IOException
+     * @throws InterruptedException
+     * @author PY
+     */
     public static Boolean importSubtitle(final String videoPath, final String subtitlePath, final String videoWithSubtitlePath) throws IOException, InterruptedException {
         List<String> globals = new ArrayList<>();
         List<String> input1Opts = new ArrayList<>();
         Map<String, List<String>> inputs = new HashMap<>();
         inputs.put(videoPath, input1Opts);
-        List<String> outputOpts = new ArrayList<>(Arrays.asList("-vf", "subtitles="+subtitlePath, "-y"));
+        List<String> outputOpts = new ArrayList<>(Arrays.asList("-vf", "subtitles=" + subtitlePath, "-y"));
         Map<String, List<String>> outputs = new HashMap<>();
         outputs.put(videoWithSubtitlePath, outputOpts);
         FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);

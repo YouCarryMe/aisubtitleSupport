@@ -67,7 +67,7 @@ public class FFmpegJ {
     /**
      * 执行命令
      *
-     * @return Bool
+     * @return 指令是否执行成功
      */
     public Boolean run() {
         String res = ExecuteCommand.exec(this.commList);
