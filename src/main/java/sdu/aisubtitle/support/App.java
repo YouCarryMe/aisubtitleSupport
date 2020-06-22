@@ -79,15 +79,25 @@ public class App {
         TencentAI.mergeSubtitle(pyFilePath, zhSubtitlePath, enSubtitlePath, mergedSubtitlePath);
     }
 
+    public static void testTextToVoice() {
+        String pyFilePath = "python/text2voice.py";
+        String text = "黑夜给了我黑色的眼睛，我却用它寻找光明。";
+        String voiceType = "4";
+        String langType = "1";
+        String outputPath = "audios/voice.mp3";
+        TencentAI.textToVoice(pyFilePath, text, voiceType, langType, outputPath);
+    }
+
     public static void main(String[] args) {
 //        testGetInfo();
 //        testCompressVideo();
-        testExportAudio();
+//        testExportAudio();
 //        testImportSubtitle();
 //        testUpdateCoverPage();
 //        testFaceFusion();
 //        testAudio2zhSubtitle();
 //        testTranslate();
 //        testMergeSubtitle();
+        testTextToVoice();
     }
 }

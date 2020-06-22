@@ -72,4 +72,9 @@ public class TencentAI {
         ExecuteCommand.exec(commList);
     }
 
+    public static void textToVoice(String pyFilePath, String text, String voiceType, String langType, String outputPath) {
+        List<String> commList = new ArrayList<>(Arrays.asList(pythonExe, pyFilePath, text, voiceType, langType, outputPath));
+        ExecuteCommand.exec(commList);
+    }
+
 }
