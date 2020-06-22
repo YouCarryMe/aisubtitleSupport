@@ -10,6 +10,18 @@ import java.util.regex.Pattern;
 
 public class MediaProcess {
 
+    private static String pythonExe = "python";
+
+    /**
+     * 根据不同的系统，更换python执行器
+     *
+     * @param str
+     * @author PY
+     */
+    public void setPythonExe(String str) {
+        pythonExe = str;
+    }
+
     /**
      * 根据时间字符串获得时长 格式：00:00:00,000
      *
@@ -114,7 +126,7 @@ public class MediaProcess {
      * @throws InterruptedException
      * @author PY
      */
-    public static Boolean compressVideo(final String videoPath, final String compressedVideoPath, final int b) throws IOException, InterruptedException {
+    public static Boolean compressVideo(final String videoPath, final String compressedVideoPath, final int b) {
         List<String> globals = new ArrayList<>();
         List<String> input1Opts = new ArrayList<>();
         Map<String, List<String>> inputs = new HashMap<>();
@@ -137,12 +149,12 @@ public class MediaProcess {
      * @throws InterruptedException
      * @author PY
      */
-    public static Boolean exportAudio(final String videoPath, final String audioPath) throws IOException, InterruptedException {
+    public static Boolean exportAudio(final String videoPath, final String audioPath) {
         List<String> globals = new ArrayList<>();
         List<String> input1Opts = new ArrayList<>();
         Map<String, List<String>> inputs = new HashMap<>();
         inputs.put(videoPath, input1Opts);
-        List<String> outputOpts = new ArrayList<>(Arrays.asList("-vn", "-c:a", "copy", "-y"));
+        List<String> outputOpts = new ArrayList<>(Arrays.asList("-f", "mp3", "-y"));
         Map<String, List<String>> outputs = new HashMap<>();
         outputs.put(audioPath, outputOpts);
         FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);
@@ -161,7 +173,7 @@ public class MediaProcess {
      * @throws InterruptedException
      * @author PY
      */
-    public static Boolean importSubtitle(final String videoPath, final String subtitlePath, final String videoWithSubtitlePath) throws IOException, InterruptedException {
+    public static Boolean importSubtitle(final String videoPath, final String subtitlePath, final String videoWithSubtitlePath) {
         List<String> globals = new ArrayList<>();
         List<String> input1Opts = new ArrayList<>();
         Map<String, List<String>> inputs = new HashMap<>();
@@ -172,6 +184,19 @@ public class MediaProcess {
         FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);
         System.out.println(ff.cmd());
         return ff.run();
+    }
+
+    public static Boolean updateCoverPage(final String pyFilePath, final String videoPath, final String option, final String params, final String outputPath) {
+        List<String> commList = new ArrayList<>(Arrays.asList(pythonExe, pyFilePath, videoPath, option, params, outputPath));
+        String res = ExecuteCommand.exec(commList);
+        String regexExitCode = "exitCode = (\\d+);";
+        Pattern pattern = Pattern.compile(regexExitCode);
+        Matcher m = pattern.matcher(res);
+        int exitCode = 1;
+        if (m.find()) {
+            exitCode = Integer.valueOf(m.group(1));
+        }
+        return exitCode == 0 ? true : false;
     }
 
 }

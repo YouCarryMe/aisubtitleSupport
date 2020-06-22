@@ -22,38 +22,29 @@ public class App {
     public static void testCompressVideo() {
         String filePath = "videos/video.mp4";
         String outputPath = "videos/video_comporessed.mp4";
-        try {
-            System.out.println(MediaProcess.compressVideo(filePath, outputPath, 600));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println(MediaProcess.compressVideo(filePath, outputPath, 600));
     }
 
     public static void testExportAudio() {
         String filePath = "videos/video.mp4";
-        String outputPath = "audios/audio.aac";
-        try {
-            System.out.println(MediaProcess.exportAudio(filePath, outputPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        String outputPath = "audios/audio.mp3";
+        System.out.println(MediaProcess.exportAudio(filePath, outputPath));
     }
 
     public static void testImportSubtitle() {
         String filePath = "videos/video.mp4";
         String subtitlePath = "subtitles/subtitles.srt";
         String outputPath = "videos/video_subtitle.mp4";
-        try {
-            System.out.println(MediaProcess.importSubtitle(filePath, subtitlePath, outputPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println(MediaProcess.importSubtitle(filePath, subtitlePath, outputPath));
+    }
+
+    public static void testUpdateCoverPage() {
+        String pyFilePath = "python/update_cover_page.py";
+        String videoPath = "videos/video.mp4";
+        String option = "time";
+        String params = "00:00:09";
+        String outputPath = "videos/video_coverpage.mp4";
+        MediaProcess.updateCoverPage(pyFilePath, videoPath, option, params, outputPath);
     }
 
     public static void testFaceFusion() {
@@ -91,8 +82,9 @@ public class App {
     public static void main(String[] args) {
 //        testGetInfo();
 //        testCompressVideo();
-//        testExportAudio();
+        testExportAudio();
 //        testImportSubtitle();
+//        testUpdateCoverPage();
 //        testFaceFusion();
 //        testAudio2zhSubtitle();
 //        testTranslate();

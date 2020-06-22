@@ -28,7 +28,6 @@ if __name__ == "__main__":
     elif pattern == 'time':
         page_path = video_path[:-len(video_path.split('.')[-1])-1]+'.jpg'
         generate_cover_page(video_path, page_path, params)
-    video_format = video_path.split('.')[-1]
     update_cover_page(video_path, page_path, output_path)
 
 
