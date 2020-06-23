@@ -11,6 +11,9 @@ import java.util.regex.Pattern;
  */
 public class App {
 
+    /**
+     * 测试获取视频信息
+     */
     public static void testGetInfo() {
         String filePath = "videos/video.mp4";
         System.out.println(MediaProcess.getTimeLen(filePath));
@@ -19,18 +22,27 @@ public class App {
         System.out.println(MediaProcess.getFormat(filePath));
     }
 
+    /**
+     * 测试压缩视频
+     */
     public static void testCompressVideo() {
         String filePath = "videos/video.mp4";
         String outputPath = "videos/video_comporessed.mp4";
         System.out.println(MediaProcess.compressVideo(filePath, outputPath, 600));
     }
 
+    /**
+     * 测试导出音频
+     */
     public static void testExportAudio() {
         String filePath = "videos/video.mp4";
         String outputPath = "audios/audio.mp3";
         System.out.println(MediaProcess.exportAudio(filePath, outputPath));
     }
 
+    /**
+     * 测试导入字幕
+     */
     public static void testImportSubtitle() {
         String filePath = "videos/video.mp4";
         String subtitlePath = "subtitles/subtitles.srt";
@@ -38,6 +50,9 @@ public class App {
         System.out.println(MediaProcess.importSubtitle(filePath, subtitlePath, outputPath));
     }
 
+    /**
+     * 测试自定义封面
+     */
     public static void testUpdateCoverPage() {
         String pyFilePath = "python/update_cover_page.py";
         String videoPath = "videos/video.mp4";
@@ -47,6 +62,9 @@ public class App {
         MediaProcess.updateCoverPage(pyFilePath, videoPath, option, params, outputPath);
     }
 
+    /**
+     * 测试人脸融合
+     */
     public static void testFaceFusion() {
 //        String imgPath = "imgs/baby.jpg";
         String imgPath = "imgs/Aragaki.jpg";
@@ -55,6 +73,9 @@ public class App {
         TencentAI.facefusion(imgPath, outputPath);
     }
 
+    /**
+     * 测试音频转字幕
+     */
     public static void testAudio2zhSubtitle() {
         String pyFilePath = "python/audio2zhSubtitle.py";
         String audioPath = "audios/audio.aac";
@@ -62,6 +83,9 @@ public class App {
         TencentAI.audio2zhSubtitle(pyFilePath, audioPath, zhSubtitlePath);
     }
 
+    /**
+     * 测试翻译字幕
+     */
     public static void testTranslate() {
         String pyFilePath = "python/demo_translate.py";
         String subtitlePath = "subtitles/zhSubtitle.srt";
@@ -71,6 +95,9 @@ public class App {
         TencentAI.translate(pyFilePath, subtitlePath, transSubtitlePath, source, target);
     }
 
+    /**
+     * 测试合并字幕
+     */
     public static void testMergeSubtitle() {
         String pyFilePath = "python/demo_merge.py";
         String zhSubtitlePath = "subtitles/zhSubtitle.srt";
@@ -79,6 +106,9 @@ public class App {
         TencentAI.mergeSubtitle(pyFilePath, zhSubtitlePath, enSubtitlePath, mergedSubtitlePath);
     }
 
+    /**
+     * 测试语音合成
+     */
     public static void testTextToVoice() {
         String pyFilePath = "python/text2voice.py";
         String text = "黑夜给了我黑色的眼睛，我却用它寻找光明。";
@@ -93,8 +123,8 @@ public class App {
 //        testCompressVideo();
 //        testExportAudio();
 //        testImportSubtitle();
-        testUpdateCoverPage();
-        testFaceFusion();
+//        testUpdateCoverPage();
+//        testFaceFusion();
 //        testAudio2zhSubtitle();
 //        testTranslate();
 //        testMergeSubtitle();

@@ -186,6 +186,16 @@ public class MediaProcess {
         return ff.run();
     }
 
+    /**
+     * 自定义视频封面
+     *
+     * @param pyFilePath python文件路径
+     * @param videoPath 视频路径（会在视频同级目录生成一个封面图片，名称和视频名一样，格式是jpg）
+     * @param option 选项：为“time”时是从视频中抽取一帧作为封面，为“picture”时是使用用户给定的图片路径作为封面
+     * @param params 当option为“time”时，输入格式为“00:00:00”，表示截取某一帧；当option为“picture”时，是图片路径
+     * @param outputPath 自定义完封面的视频路径
+     * @return
+     */
     public static Boolean updateCoverPage(final String pyFilePath, final String videoPath, final String option, final String params, final String outputPath) {
         List<String> commList = new ArrayList<>(Arrays.asList(pythonExe, pyFilePath, videoPath, option, params, outputPath));
         String res = ExecuteCommand.exec(commList);

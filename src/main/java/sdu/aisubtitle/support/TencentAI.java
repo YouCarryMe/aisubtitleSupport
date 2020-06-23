@@ -72,6 +72,15 @@ public class TencentAI {
         ExecuteCommand.exec(commList);
     }
 
+    /**
+     * 语音合成
+     *
+     * @param pyFilePath python文件路径
+     * @param text       文本
+     * @param voiceType  声音类型
+     * @param langType   语言类型
+     * @param outputPath 输出音频的路径
+     */
     public static void textToVoice(String pyFilePath, String text, String voiceType, String langType, String outputPath) {
         List<String> commList = new ArrayList<>(Arrays.asList(pythonExe, pyFilePath, text, voiceType, langType, outputPath));
         ExecuteCommand.exec(commList);
