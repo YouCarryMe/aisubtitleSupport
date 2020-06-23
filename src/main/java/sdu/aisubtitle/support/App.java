@@ -66,11 +66,16 @@ public class App {
      * 测试人脸融合
      */
     public static void testFaceFusion() {
-//        String imgPath = "imgs/baby.jpg";
-        String imgPath = "imgs/Aragaki.jpg";
+        String imgPath = "imgs/baby.jpg";
+//        String imgPath = "imgs/Aragaki.jpg";
 //        String outputPath = "imgs/fusion.jpg";
-        String outputPath = "imgs/fusion1.jpg";
-        TencentAI.facefusion(imgPath, outputPath);
+//        String outputPath = "imgs/fusion1.jpg";
+        String outputPath = "imgs/fusion2.jpg";
+        TencentAI.facefusion(imgPath, outputPath, "qc_303269_803589_6");
+    }
+
+    public static void testGetDescribeMaterialList() {
+        System.out.println(TencentAI.getDescribeMaterialList());
     }
 
     /**
@@ -124,10 +129,11 @@ public class App {
 //        testExportAudio();
 //        testImportSubtitle();
 //        testUpdateCoverPage();
+//        testGetDescribeMaterialList();
 //        testFaceFusion();
 //        testAudio2zhSubtitle();
 //        testTranslate();
 //        testMergeSubtitle();
-        testTextToVoice();
+//        testTextToVoice();
     }
 }

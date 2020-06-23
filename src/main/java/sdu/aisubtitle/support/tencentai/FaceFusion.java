@@ -1,12 +1,19 @@
 package sdu.aisubtitle.support.tencentai;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 import com.tencentcloudapi.common.Credential;
+import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.facefusion.v20181201.FacefusionClient;
 import com.tencentcloudapi.facefusion.v20181201.models.FaceFusionRequest;
 import com.tencentcloudapi.facefusion.v20181201.models.FaceFusionResponse;
+import com.tencentcloudapi.facefusion.v20181201.models.DescribeMaterialListRequest;
+import com.tencentcloudapi.facefusion.v20181201.models.DescribeMaterialListResponse;
+import sdu.aisubtitle.support.TencentAI;
+import sun.nio.cs.StreamEncoder;
 
 import java.io.*;
 import java.util.Base64;
@@ -80,13 +87,53 @@ public class FaceFusion {
     }
 
     /**
+     * 获取人脸融合模板列表素材信息。这一部分主要用于传给前端，告诉他们我们可进行换脸的素材有哪些。
+     *
+     * @return 一个JSONArray，其中的每个JSONObject有两个键值对，一个是MaterialId，表示模板id，为String类型，另一个是Url，表示模板图片的网络地址
+     */
+    public static JSONArray getDescribeMaterialList() {
+        JSONArray res = new JSONArray();
+        try {
+
+            Credential cred = new Credential(TencentaiInfo.secretId, TencentaiInfo.secretKey);
+
+            HttpProfile httpProfile = new HttpProfile();
+            httpProfile.setEndpoint("facefusion.tencentcloudapi.com");
+
+            ClientProfile clientProfile = new ClientProfile();
+            clientProfile.setHttpProfile(httpProfile);
+
+            FacefusionClient client = new FacefusionClient(cred, "ap-beijing", clientProfile);
+
+            String params = "{\"ActivityId\":303269}";
+            DescribeMaterialListRequest req = DescribeMaterialListRequest.fromJsonString(params, DescribeMaterialListRequest.class);
+
+            DescribeMaterialListResponse resp = client.DescribeMaterialList(req);
+
+            JSONObject jsonObject = JSONObject.parseObject(DescribeMaterialListRequest.toJsonString(resp));
+            JSONArray MaterialInfos = jsonObject.getJSONArray("MaterialInfos");
+
+            for (int i = 0; i < MaterialInfos.size(); i++) {
+                JSONObject temp = new JSONObject();
+                temp.put("MaterialId", MaterialInfos.getJSONObject(i).get("MaterialId"));
+                temp.put("Url", MaterialInfos.getJSONObject(i).get("Url"));
+                res.add(temp);
+            }
+        } catch (TencentCloudSDKException e) {
+            System.out.println(e.toString());
+        }
+        return res;
+    }
+
+    /**
      * 人脸融合
      *
      * @param imgPath    用户的人脸图片
      * @param outputPath 融合后的人脸图片
+     * @param MaterialId 人脸融合模板id
      * @author PY
      */
-    public static void facefusion(String imgPath, String outputPath) {
+    public static void facefusion(String imgPath, String outputPath, String MaterialId) {
 
         try {
 
@@ -99,15 +146,15 @@ public class FaceFusion {
             clientProfile.setHttpProfile(httpProfile);
             FacefusionClient client = new FacefusionClient(cred, "ap-beijing", clientProfile);
 
-            String format = "{\"ProjectId\":\"303269\",\"ModelId\":\"qc_303269_330150_8\",\"Image\":\"%s\",\"RspImgType\":\"base64\"}";
-            String params = String.format(format, imgToBase64(imgPath));
+            String format = "{\"ProjectId\":\"303269\",\"ModelId\":\"%s\",\"Image\":\"%s\",\"RspImgType\":\"base64\"}";
+            String params = String.format(format, MaterialId, imgToBase64(imgPath));
             FaceFusionRequest req = FaceFusionRequest.fromJsonString(params, FaceFusionRequest.class);
 
             FaceFusionResponse resp = client.FaceFusion(req);
 
             JSONObject jsonObject = JSONObject.parseObject(FaceFusionRequest.toJsonString(resp));
             base64ToImg(jsonObject.get("Image").toString(), outputPath);
-        } catch (Exception e) {
+        } catch (TencentCloudSDKException e) {
             System.out.println(e.toString());
         }
 

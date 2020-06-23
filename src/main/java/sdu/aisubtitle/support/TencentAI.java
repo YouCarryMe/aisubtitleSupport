@@ -1,5 +1,6 @@
 package sdu.aisubtitle.support;
 
+import com.alibaba.fastjson.JSONArray;
 import sdu.aisubtitle.support.tencentai.FaceFusion;
 
 import java.util.ArrayList;
@@ -21,13 +22,23 @@ public class TencentAI {
     }
 
     /**
+     * 获取人脸融合模板列表素材信息。这一部分主要用于传给前端，告诉他们我们可进行换脸的素材有哪些。
+     *
+     * @return 一个JSONArray，其中的每个JSONObject有两个键值对，一个是MaterialId，表示模板id，为String类型，另一个是Url，表示模板图片的网络地址
+     */
+    public static JSONArray getDescribeMaterialList() {
+        return FaceFusion.getDescribeMaterialList();
+    }
+
+    /**
      * 人脸融合
      *
      * @param imgPath    用户人脸
      * @param outputPath 融合后的人脸
+     * @param MaterialId 人脸融合模板id
      */
-    public static void facefusion(String imgPath, String outputPath) {
-        FaceFusion.facefusion(imgPath, outputPath);
+    public static void facefusion(String imgPath, String outputPath, String MaterialId) {
+        FaceFusion.facefusion(imgPath, outputPath, MaterialId);
     }
 
     /**
