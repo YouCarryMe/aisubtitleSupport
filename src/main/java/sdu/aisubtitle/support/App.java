@@ -93,8 +93,8 @@ public class App {
 //        testCompressVideo();
 //        testExportAudio();
 //        testImportSubtitle();
-//        testUpdateCoverPage();
-//        testFaceFusion();
+        testUpdateCoverPage();
+        testFaceFusion();
 //        testAudio2zhSubtitle();
 //        testTranslate();
 //        testMergeSubtitle();
