@@ -1,9 +1,8 @@
 package sdu.aisubtitle.support;
 
-import com.alibaba.fastjson.JSONObject;
+import sdu.aisubtitle.support.voicechanger.SoundEnum;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -190,9 +189,9 @@ public class MediaProcess {
      * 自定义视频封面
      *
      * @param pyFilePath python文件路径
-     * @param videoPath 视频路径（会在视频同级目录生成一个封面图片，名称和视频名一样，格式是jpg）
-     * @param option 选项：为“time”时是从视频中抽取一帧作为封面，为“picture”时是使用用户给定的图片路径作为封面
-     * @param params 当option为“time”时，输入格式为“00:00:00”，表示截取某一帧；当option为“picture”时，是图片路径
+     * @param videoPath  视频路径（会在视频同级目录生成一个封面图片，名称和视频名一样，格式是jpg）
+     * @param option     选项：为“time”时是从视频中抽取一帧作为封面，为“picture”时是使用用户给定的图片路径作为封面
+     * @param params     当option为“time”时，输入格式为“00:00:00”，表示截取某一帧；当option为“picture”时，是图片路径
      * @param outputPath 自定义完封面的视频路径
      * @return
      */
@@ -207,6 +206,80 @@ public class MediaProcess {
             exitCode = Integer.valueOf(m.group(1));
         }
         return exitCode == 0 ? true : false;
+    }
+
+    /**
+     * 变声器（输入和输出只支持MP3格式）
+     *
+     * @param voicePath  原始音频路径
+     * @param outputPath 输出音频路径
+     * @param type       声音类别（1：萝莉；2：大叔；3：肥仔；4：熊孩子；5：困兽；6：重机械；7：感冒；8：空灵）
+     */
+    public static void voiceChanger(final String voicePath, final String outputPath, final int type) {
+        SoundEnum soundEnum;
+        switch (type) {
+            case 1:
+                soundEnum = SoundEnum.LUOLI;
+                break;
+            case 2:
+                soundEnum = SoundEnum.DASHU;
+                break;
+            case 3:
+                soundEnum = SoundEnum.FEIZAI;
+                break;
+            case 4:
+                soundEnum = SoundEnum.XIONGHAIZI;
+                break;
+            case 5:
+                soundEnum = SoundEnum.KUNSHOU;
+                break;
+            case 6:
+                soundEnum = SoundEnum.ZHONGJIXIE;
+                break;
+            case 7:
+                soundEnum = SoundEnum.GANMAO;
+                break;
+            case 8:
+                soundEnum = SoundEnum.KONGLING;
+                break;
+            default:
+                soundEnum = SoundEnum.LUOLI;
+                break;
+        }
+        byte[] pcmBytes = soundEnum.run(voicePath);
+        byte[] wavHeader = SoundEnum.pcm2wav(pcmBytes);
+        try {
+            OutputStream wavOutput = new FileOutputStream(outputPath);
+            try {
+                wavOutput.write(wavHeader);
+                wavOutput.write(pcmBytes);
+                wavOutput.flush();
+                wavHeader.clone();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        wav2mp3(outputPath);
+    }
+
+    public static Boolean wav2mp3(String audioPath) {
+        List<String> globals = new ArrayList<>();
+        List<String> input1Opts = new ArrayList<>();
+        Map<String, List<String>> inputs = new HashMap<>();
+        inputs.put(audioPath, input1Opts);
+        List<String> outputOpts = new ArrayList<>(Arrays.asList("-acodec", "libmp3lame", "-y"));
+        Map<String, List<String>> outputs = new HashMap<>();
+        String[] div = audioPath.split("\\.");
+        String outputPath = "";
+        for (int i = 0; i < div.length - 1; i++)
+            outputPath += div[i] + ".";
+        outputPath += "mp3";
+        outputs.put(outputPath, outputOpts);
+        FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);
+        System.out.println(ff.cmd());
+        return ff.run();
     }
 
 }

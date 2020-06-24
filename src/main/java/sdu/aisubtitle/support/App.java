@@ -1,11 +1,5 @@
 package sdu.aisubtitle.support;
 
-import sdu.aisubtitle.support.tencentai.FaceFusion;
-
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Hello world!
  */
@@ -123,6 +117,16 @@ public class App {
         TencentAI.textToVoice(pyFilePath, text, voiceType, langType, outputPath);
     }
 
+    /**
+     * 测试变声器
+     */
+    public static void testVoiceChanger() {
+        String voicePath = "audios/voice_origin.mp3";
+        String outputPath = "audios/voice_luoli.wav";
+        int type = 1;
+        MediaProcess.voiceChanger(voicePath, outputPath, type);
+    }
+
     public static void main(String[] args) {
 //        testGetInfo();
 //        testCompressVideo();
@@ -135,5 +139,6 @@ public class App {
 //        testTranslate();
 //        testMergeSubtitle();
 //        testTextToVoice();
+        testVoiceChanger();
     }
 }
