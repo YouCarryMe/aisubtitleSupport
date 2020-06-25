@@ -121,10 +121,20 @@ public class App {
      * 测试变声器
      */
     public static void testVoiceChanger() {
-        String voicePath = "audios/voice_origin.mp3";
-        String outputPath = "audios/voice_luoli.wav";
+        String voicePath = "audios/audio.mp3";
+        String outputPath = "audios/audio_luoli.mp3";
         int type = 1;
         MediaProcess.voiceChanger(voicePath, outputPath, type);
+    }
+
+    /**
+     * 测试替换音频
+     */
+    public static void testReplaceAudio() {
+        String videoPath = "videos/video.mp4";
+        String audioPath = "audios/audio_luoli.mp3";
+        String outputPath = "videos/video_luoli.mp4";
+        MediaProcess.replaceAudio(videoPath, audioPath, outputPath);
     }
 
     public static void main(String[] args) {
@@ -139,6 +149,7 @@ public class App {
 //        testTranslate();
 //        testMergeSubtitle();
 //        testTextToVoice();
-        testVoiceChanger();
+//        testVoiceChanger();
+        testReplaceAudio();
     }
 }

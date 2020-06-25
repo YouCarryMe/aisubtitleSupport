@@ -249,7 +249,12 @@ public class MediaProcess {
         byte[] pcmBytes = soundEnum.run(voicePath);
         byte[] wavHeader = SoundEnum.pcm2wav(pcmBytes);
         try {
-            OutputStream wavOutput = new FileOutputStream(outputPath);
+            String[] div = outputPath.split("\\.");
+            String wavPath = "";
+            for (int i = 0; i < div.length - 1; i++)
+                wavPath += div[i] + ".";
+            wavPath += "wav";
+            OutputStream wavOutput = new FileOutputStream(wavPath);
             try {
                 wavOutput.write(wavHeader);
                 wavOutput.write(pcmBytes);
@@ -258,12 +263,19 @@ public class MediaProcess {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            wav2mp3(wavPath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        wav2mp3(outputPath);
+
     }
 
+    /**
+     * wav格式音频转换为mp3格式。会在同目录下生成名字相同的“.mp3”后缀的音频文件
+     *
+     * @param audioPath wav音频文件的路径
+     * @return
+     */
     public static Boolean wav2mp3(String audioPath) {
         List<String> globals = new ArrayList<>();
         List<String> input1Opts = new ArrayList<>();
@@ -282,4 +294,26 @@ public class MediaProcess {
         return ff.run();
     }
 
+    /**
+     * 替换视频中声音（当然前题是保证时长一致，这里主要使用原视频变声之后的音频文件替换原始视频中的声音）
+     *
+     * @param videoPath  视频路径
+     * @param audioPath  变声后的音频文件
+     * @param outputPath 输出路径
+     * @return
+     */
+    public static Boolean replaceAudio(final String videoPath, final String audioPath, final String outputPath) {
+        List<String> globals = new ArrayList<>();
+        List<String> input1Opts = new ArrayList<>();
+        List<String> input2Opts = new ArrayList<>();
+        Map<String, List<String>> inputs = new HashMap<>();
+        inputs.put(videoPath, input1Opts);
+        inputs.put(audioPath, input2Opts);
+        List<String> outputOpts = new ArrayList<>(Arrays.asList("-c:v", "copy", "-c:a", "aac", "-strict", "experimental", "-map", "0:v:0", "-map", "1:a:0", "-y"));
+        Map<String, List<String>> outputs = new HashMap<>();
+        outputs.put(outputPath, outputOpts);
+        FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);
+        System.out.println(ff.cmd());
+        return ff.run();
+    }
 }
