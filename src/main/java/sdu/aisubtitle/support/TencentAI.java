@@ -47,10 +47,11 @@ public class TencentAI {
      * @param pyFilePath     python文件路径
      * @param audioPath      输入音频文件的路径
      * @param zhSubtitlePath 输入字幕文件的路径
+     * @param language       语言(zh 或 en)
      * @author PY
      */
-    public static void audio2zhSubtitle(String pyFilePath, String audioPath, String zhSubtitlePath) {
-        List<String> commList = new ArrayList<>(Arrays.asList(pythonExe, pyFilePath, audioPath, zhSubtitlePath));
+    public static void audio2zhSubtitle(String pyFilePath, String audioPath, String zhSubtitlePath, String language) {
+        List<String> commList = new ArrayList<>(Arrays.asList(pythonExe, pyFilePath, audioPath, zhSubtitlePath, language));
         ExecuteCommand.exec(commList);
     }
 

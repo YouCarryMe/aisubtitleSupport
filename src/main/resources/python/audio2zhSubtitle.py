@@ -27,7 +27,7 @@ class audio2text(object):
         self.client = asr_client.AsrClient(self.cred, "", self.clientProfile)
 
     # 发送请求
-    def a2t(self, audioFilePath):
+    def a2t(self, audioFilePath, language):
         try:
             # 读取文件以及转base64
             audioFile = open(audioFilePath, mode='rb')
@@ -36,7 +36,10 @@ class audio2text(object):
             base64Data = base64.b64encode(data).decode()
 
             req = models.CreateRecTaskRequest()
-            params = {"EngineModelType": "16k_0", "ChannelNum": 1, "ResTextFormat": 0, "SourceType": 1,
+            emt = "16k_zh_video"
+            if language == "en":
+                emt = "16k_en"
+            params = {"EngineModelType": emt, "ChannelNum": 1, "ResTextFormat": 0, "SourceType": 1,
                       "Data": base64Data, "DataLen": dataLen}
             req._deserialize(params)
             resp = self.client.CreateRecTask(req)
@@ -78,10 +81,10 @@ def transToTime(strTime):
 
 
 # 根据音频得到识别结果，处理并输出srt格式的中文字幕
-def getZhSubtitle(audioPath, zhFilePath):
+def getZhSubtitle(audioPath, zhFilePath, language):
     # 发送识别请求
     testA2T = audio2text()
-    myTaskId = testA2T.a2t(audioPath)
+    myTaskId = testA2T.a2t(audioPath, language)
     myResult = ''
     cnt = 0
     # 查询识别结果
@@ -111,4 +114,5 @@ def getZhSubtitle(audioPath, zhFilePath):
 if __name__ == '__main__':
     audioPath = argv[1]  # 音频路径
     zhFilePath = argv[2]  # 中文字幕
-    getZhSubtitle(audioPath, zhFilePath)
+    language = argv[3]
+    getZhSubtitle(audioPath, zhFilePath, language)

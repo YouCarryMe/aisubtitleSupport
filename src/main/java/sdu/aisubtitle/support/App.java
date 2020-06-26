@@ -77,9 +77,9 @@ public class App {
      */
     public static void testAudio2zhSubtitle() {
         String pyFilePath = "python/audio2zhSubtitle.py";
-        String audioPath = "audios/audio.aac";
-        String zhSubtitlePath = "subtitles/zhSubtitle.srt";
-        TencentAI.audio2zhSubtitle(pyFilePath, audioPath, zhSubtitlePath);
+        String audioPath = "audios/en.mp3";
+        String zhSubtitlePath = "subtitles/enSubtitle.srt";
+        TencentAI.audio2zhSubtitle(pyFilePath, audioPath, zhSubtitlePath, "en");
     }
 
     /**
@@ -145,11 +145,11 @@ public class App {
 //        testUpdateCoverPage();
 //        testGetDescribeMaterialList();
 //        testFaceFusion();
-//        testAudio2zhSubtitle();
+        testAudio2zhSubtitle();
 //        testTranslate();
 //        testMergeSubtitle();
 //        testTextToVoice();
 //        testVoiceChanger();
-        testReplaceAudio();
+//        testReplaceAudio();
     }
 }
