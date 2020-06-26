@@ -1,5 +1,8 @@
 package sdu.aisubtitle.support;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * Hello world!
  */
@@ -137,6 +140,31 @@ public class App {
         MediaProcess.replaceAudio(videoPath, audioPath, outputPath);
     }
 
+    /**
+     * 测试从json生成srt
+     */
+    public static void testSubtitleJson2srt() {
+        JSONArray subtitle = new JSONArray();
+        JSONObject sub1 = new JSONObject();
+        sub1.put("begin", "00:00:00,460");
+        sub1.put("end", "00:00:03,210");
+        JSONArray texts1 = new JSONArray();
+        texts1.add("说一下。");
+        texts1.add("Tell me.");
+        sub1.put("texts", texts1);
+        subtitle.add(sub1);
+        JSONObject sub2 = new JSONObject();
+        sub2.put("begin", "00:00:03,960");
+        sub2.put("end", "00:00:07,230");
+        JSONArray texts2 = new JSONArray();
+        texts2.add("嗯，你们干什么。");
+        texts2.add("Well, what are you doing.");
+        sub2.put("texts", texts2);
+        subtitle.add(sub2);
+        System.out.println(subtitle);
+        MediaProcess.subtitleJson2srt(subtitle, "subtitles/json2srt.srt");
+    }
+
     public static void main(String[] args) {
 //        testGetInfo();
 //        testCompressVideo();
@@ -145,11 +173,12 @@ public class App {
 //        testUpdateCoverPage();
 //        testGetDescribeMaterialList();
 //        testFaceFusion();
-        testAudio2zhSubtitle();
+//        testAudio2zhSubtitle();
 //        testTranslate();
 //        testMergeSubtitle();
 //        testTextToVoice();
 //        testVoiceChanger();
 //        testReplaceAudio();
+        testSubtitleJson2srt();
     }
 }

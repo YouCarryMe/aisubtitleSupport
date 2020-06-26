@@ -1,5 +1,7 @@
 package sdu.aisubtitle.support;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import sdu.aisubtitle.support.voicechanger.SoundEnum;
 
 import java.io.*;
@@ -315,5 +317,36 @@ public class MediaProcess {
         FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);
         System.out.println(ff.cmd());
         return ff.run();
+    }
+
+    /**
+     * json格式的字幕转srt格式并保存
+     *
+     * @param subtitle   表示字幕的json数组
+     * @param outputPath 输出路径
+     */
+    public static void subtitleJson2srt(final JSONArray subtitle, final String outputPath) {
+        StringBuffer content = new StringBuffer();
+        for (int i = 0; i < subtitle.size(); i++) {
+            JSONObject temp = subtitle.getJSONObject(i);
+            content.append("" + (i + 1) + "\n");
+            String begin = temp.getString("begin"), end = temp.getString("end");
+            content.append(begin + " --> " + end + "\n");
+            JSONArray texts = temp.getJSONArray("texts");
+            for (int j = 0; j < texts.size(); j++) {
+                content.append(texts.getString(j) + "\n");
+            }
+            content.append("\n");
+        }
+        File file = new File(outputPath);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+            osw.write(content.toString());
+            osw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
