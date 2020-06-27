@@ -164,6 +164,14 @@ public class App {
         System.out.println(subtitle);
         MediaProcess.subtitleJson2srt(subtitle, "subtitles/json2srt.srt");
     }
+     
+     /**
+     * 测试从srt生成json，返回json字符串
+     */
+    public static void testSubtitleSrt2json() throws IOException {
+    	String inputPath = "subtitles/subtitles_b.srt";
+    	System.out.println(MediaProcess.subtitleSrt2json(inputPath));
+    }
 
     /**
      * 测试根据时间戳生成图片
@@ -190,6 +198,7 @@ public class App {
 //        testVoiceChanger();
 //        testReplaceAudio();
 //        testSubtitleJson2srt();
-        testGenerateCoverPage();
+        testSubtitleSrt2json();
+//        testGenerateCoverPage();
     }
 }
