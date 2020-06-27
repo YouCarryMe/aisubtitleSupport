@@ -165,6 +165,9 @@ public class App {
         MediaProcess.subtitleJson2srt(subtitle, "subtitles/json2srt.srt");
     }
 
+    /**
+     * 测试根据时间戳生成图片
+     */
     public static void testGenerateCoverPage() {
         String videoPath = "videos/video.mp4";
         String pagePath = "imgs/coverpage.jpg";

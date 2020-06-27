@@ -350,6 +350,14 @@ public class MediaProcess {
         }
     }
 
+    /**
+     * 根据时间戳生成图片
+     *
+     * @param videoPath 视频路径
+     * @param pagePath  图片路径
+     * @param time      时间
+     * @return
+     */
     public static Boolean generateCoverPage(final String videoPath, final String pagePath, final String time) {
         List<String> globals = new ArrayList<>();
         List<String> input1Opts = new ArrayList<>(Arrays.asList("-ss", time));
