@@ -165,6 +165,13 @@ public class App {
         MediaProcess.subtitleJson2srt(subtitle, "subtitles/json2srt.srt");
     }
 
+    public static void testGenerateCoverPage() {
+        String videoPath = "videos/video.mp4";
+        String pagePath = "imgs/coverpage.jpg";
+        String time = "00:00:09";
+        MediaProcess.generateCoverPage(videoPath, pagePath, time);
+    }
+
     public static void main(String[] args) {
 //        testGetInfo();
 //        testCompressVideo();
@@ -179,6 +186,7 @@ public class App {
 //        testTextToVoice();
 //        testVoiceChanger();
 //        testReplaceAudio();
-        testSubtitleJson2srt();
+//        testSubtitleJson2srt();
+        testGenerateCoverPage();
     }
 }

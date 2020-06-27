@@ -2,6 +2,7 @@ package sdu.aisubtitle.support;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import sdu.aisubtitle.support.voicechanger.SoundEnum;
 
 import java.io.*;
@@ -347,6 +348,19 @@ public class MediaProcess {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
+    public static Boolean generateCoverPage(final String videoPath, final String pagePath, final String time) {
+        List<String> globals = new ArrayList<>();
+        List<String> input1Opts = new ArrayList<>(Arrays.asList("-ss", time));
+        Map<String, List<String>> inputs = new HashMap<>();
+        inputs.put(videoPath, input1Opts);
+        List<String> outputOpts = new ArrayList<>(Arrays.asList("-vframes", "1", "-q:v", "2", "-y"));
+        Map<String, List<String>> outputs = new HashMap<>();
+        outputs.put(pagePath, outputOpts);
+        FFmpegJ ff = new FFmpegJ(globals, inputs, outputs);
+        System.out.println(ff.cmd());
+        return ff.run();
+    }
+
 }
