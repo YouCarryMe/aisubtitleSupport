@@ -3,6 +3,8 @@ package sdu.aisubtitle.support;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.IOException;
+
 /**
  * Hello world!
  */
@@ -189,7 +191,7 @@ public class App {
 //        testExportAudio();
 //        testImportSubtitle();
 //        testUpdateCoverPage();
-//        testGetDescribeMaterialList();
+        testGetDescribeMaterialList();
 //        testFaceFusion();
 //        testAudio2zhSubtitle();
 //        testTranslate();
@@ -198,7 +200,7 @@ public class App {
 //        testVoiceChanger();
 //        testReplaceAudio();
 //        testSubtitleJson2srt();
-        testSubtitleSrt2json();
+//        testSubtitleSrt2json();
 //        testGenerateCoverPage();
     }
 }

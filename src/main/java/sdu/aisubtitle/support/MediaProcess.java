@@ -352,47 +352,45 @@ public class MediaProcess {
 
     /**
      * srt格式字幕转json格式并返回数据
-     * 
-     * @param  inputPath   srt字幕路径
-     * @throws IOException 
-     * 
+     *
+     * @param inputPath srt字幕路径
+     * @throws IOException
      */
     public static String subtitleSrt2json(final String inputPath) throws IOException {
-    	BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputPath), "UTF-8"));
-    	String indexline,timeline,textline_zh,textline_en,kongline;
-    	JSONArray subtitle = new JSONArray();
-                while ((indexline = reader.readLine()) != null && (timeline = reader.readLine()) != null && 
-    			(textline_zh = reader.readLine()) != null && (textline_en = reader.readLine()) != null &&(kongline = reader.readLine()) != null)
-    	{
-    		String rebegin = "(.*?) -->";
-    		String reend = "(.*?)(--> )(.*)";
-    		List<String> list = new ArrayList<String>();
-    		List<String> extvounoLists = new ArrayList<String>();
-    		Pattern pabegin = Pattern.compile(rebegin);
-    		Pattern paend = Pattern.compile(reend);
-    		Matcher mbegin = pabegin.matcher(timeline);
-    		Matcher mend = paend.matcher(timeline);
-    		JSONObject subs = new JSONObject();
-            		while (mend.find()) {  
-               			int i = 1;  
-                		list.add(mend.group(i));
-                		subs.put("end", mend.group(i+2));
-                		i++;  
-            		} 
-            		while (mbegin.find()) {  
-                		int i = 1;  
-                		list.add(mbegin.group(i));
-                		subs.put("begin", mbegin.group(i));
-                		i++;  
-            		}	
-            		JSONArray texts = new JSONArray();
-            		texts.add(textline_zh);
-            		texts.add(textline_en);
-            		subs.put("texts", texts);
-            		subtitle.add(subs);
-    	
-            return JSONObject.toJSONString(subtitle);
-    }  
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputPath), "UTF-8"));
+        String indexline, timeline, textline_zh, textline_en, kongline;
+        JSONArray subtitle = new JSONArray();
+        while ((indexline = reader.readLine()) != null && (timeline = reader.readLine()) != null &&
+                (textline_zh = reader.readLine()) != null && (textline_en = reader.readLine()) != null && (kongline = reader.readLine()) != null) {
+            String rebegin = "(.*?) -->";
+            String reend = "(.*?)(--> )(.*)";
+            List<String> list = new ArrayList<String>();
+            List<String> extvounoLists = new ArrayList<String>();
+            Pattern pabegin = Pattern.compile(rebegin);
+            Pattern paend = Pattern.compile(reend);
+            Matcher mbegin = pabegin.matcher(timeline);
+            Matcher mend = paend.matcher(timeline);
+            JSONObject subs = new JSONObject();
+            while (mend.find()) {
+                int i = 1;
+                list.add(mend.group(i));
+                subs.put("end", mend.group(i + 2));
+                i++;
+            }
+            while (mbegin.find()) {
+                int i = 1;
+                list.add(mbegin.group(i));
+                subs.put("begin", mbegin.group(i));
+                i++;
+            }
+            JSONArray texts = new JSONArray();
+            texts.add(textline_zh);
+            texts.add(textline_en);
+            subs.put("texts", texts);
+            subtitle.add(subs);
+        }
+        return JSONObject.toJSONString(subtitle);
+    }
 
     /**
      * 根据时间戳生成图片
